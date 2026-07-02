@@ -1,0 +1,14 @@
+{
+  "name": "StreamWrap Web",
+  "short_name": "StreamWrap",
+  "description": "Free IPTV Web Player — Watch Live TV & World Cup 2026",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#121212",
+  "theme_color": "#121212",
+  "categories": ["entertainment", "sports", "tv"],
+  "icons": [
+    { "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%236C5CE7' rx='80'/%3E%3Ctext x='256' y='340' font-size='280' text-anchor='middle' fill='white' font-family='sans-serif'%3ES%3C/text%3E%3C/svg%3E", "sizes": "512x512", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

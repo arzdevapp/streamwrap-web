@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#121212">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%236C5CE7' rx='80'/%3E%3Ctext x='256' y='340' font-size='280' text-anchor='middle' fill='white' font-family='sans-serif'%3ES%3C/text%3E%3C/svg%3E">
+  <title>StreamWrap Web — Live TV & World Cup 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div id="loading-screen">
+    <div class="spinner"></div>
+    <p>StreamWrap Web</p>
+  </div>
+
+  <!-- Password Gate -->
+  <div id="password-gate" class="hidden">
+    <div class="gate-box">
+      <div class="gate-icon">🔒</div>
+      <h2>StreamWrap</h2>
+      <p>Enter password to access</p>
+      <input type="password" id="gate-password" placeholder="Password" autocomplete="off">
+      <button id="gate-btn" class="btn-primary">Unlock</button>
+      <p id="gate-error" class="hidden" style="color:#FF4757;font-size:13px;margin-top:8px;">Wrong password</p>
+    </div>
+  </div>
+
+  <!-- App Container -->
+  <div id="app" class="hidden">
+    <!-- Header -->
+    <header>
+      <div class="header-left">
+        <h1>StreamWrap</h1>
+        <span class="badge-web">Web</span>
+      </div>
+      <button id="menu-btn" class="icon-btn" aria-label="Menu">☰</button>
+    </header>
+
+    <!-- Live Matches Grid (SportzX-style) -->
+    <section id="matches-section">
+      <div class="section-header"><h3>🔴 Live & Today's Matches</h3><span id="match-count"></span></div>
+      <div id="matches-grid"></div>
+    </section>
+
+    <!-- Hero Section: FIFA World Cup 2026 -->
+    <section id="hero">
+      <div class="hero-gradient">
+        <div class="hero-content">
+          <div class="hero-tag" style="background:rgba(46,204,113,0.2);color:#2ecc71;">🇨🇦 Canada in Round of 32!</div>
+          <h2>FIFA World Cup 2026</h2>
+          <p>Next: Canada vs TBD — June 28 ⏰</p>
+          <div class="hero-actions">
+            <button id="hero-watch-btn" class="btn-primary">
+              ▶ Watch Live Sports
+            </button>
+            <button id="hero-browse-btn" class="btn-secondary">
+              Browse Channels
+            </button>
+          </div>
+        </div>
+        <div class="hero-trophy">🏆</div>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <main>
+      <!-- Playlist Input -->
+      <section id="playlist-section">
+        <div class="section-header">
+          <h3>📺 M3U Playlist</h3>
+        </div>
+        <div class="playlist-input-group">
+          <input type="url" id="playlist-url" placeholder="Paste M3U URL here..." value="https://iptv-org.github.io/iptv/index.m3u">
+          <button id="load-btn" class="btn-primary">Load</button>
+        </div>
+        <div class="quick-playlists">
+          <button class="pill-btn active" data-url="worldcup">🏆 World Cup</button>
+          <button class="pill-btn" data-url="https://iptv-org.github.io/iptv/categories/sports.m3u">⚽ Sports</button>
+          <button class="pill-btn" data-url="https://iptv-org.github.io/iptv/index.m3u">🌍 All Channels</button>
+          <button class="pill-btn" data-url="https://raw.githubusercontent.com/Free-TV/IPTV/master/iptv.m3u">📡 Free TV</button>
+          <button class="pill-btn" data-url="https://streamwrap-m3u.pages.dev/ph.m3u">🇵🇭 Philippines</button>
+          <button class="pill-btn" data-url="https://iptv-org.github.io/iptv/categories/news.m3u">📰 News</button>
+          <a href="https://netprime.to" target="_blank" rel="noopener noreferrer" class="pill-btn external">🎬 Movies</a>
+        </div>
+        <div id="playlist-status" class="hidden"></div>
+      </section>
+
+      <!-- Channels -->
+      <section id="channels-section" class="hidden">
+        <div class="section-header">
+          <h3 id="channel-count">Channels</h3>
+          <input type="text" id="search-input" placeholder="Search..." class="search-input">
+        </div>
+        <div id="category-tabs" class="category-tabs"></div>
+        <div id="channel-list"></div>
+      </section>
+    </main>
+
+    <!-- Player Overlay -->
+    <div id="player-overlay" class="hidden">
+      <div id="player-header">
+        <button id="close-player" class="icon-btn">✕</button>
+        <span id="player-channel-name">Channel</span>
+      </div>
+      <div id="player-container">
+        <video id="video-player" controls autoplay playsinline></video>
+        <div id="player-hint" class="hidden"></div>
+        <div id="player-error" class="hidden">
+          <p>⚠️ Could not load stream</p>
+          <p class="player-error-sub">The channel URL may be down. Try another channel below.</p>
+          <button id="retry-btn" class="btn-secondary">Retry</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p>StreamWrap Web — Free IPTV Player. Paste any M3U URL to watch live TV.</p>
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
