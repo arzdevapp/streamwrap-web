@@ -76,6 +76,7 @@ function initApp() {
   setupModeTabs();
   setupSearch();
   setupNavigation();
+  setupTVRemoteNavigation();
   loadMovieTV();
   registerServiceWorker();
 }
@@ -897,6 +898,119 @@ function registerServiceWorker() {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js').catch(() => {});
   }
+}
+
+// ==================== TV REMOTE / KEYBOARD NAVIGATION ====================
+function setupTVRemoteNavigation() {
+  const selector = [
+    'button', 'input', 'select', 'a[href]',
+    '.movie-card', '.episode-item', '.channel-item',
+    '[onclick]', '[tabindex]'
+  ].join(',');
+
+  const prepare = (root = document) => {
+    root.querySelectorAll(selector).forEach((el) => {
+      if (el.matches('input, select, button, a[href]')) return;
+      if (!el.hasAttribute('tabindex')) el.tabIndex = 0;
+      if (!el.hasAttribute('role')) el.setAttribute('role', 'button');
+    });
+  };
+
+  const visible = (el) => {
+    const rect = el.getBoundingClientRect();
+    const style = getComputedStyle(el);
+    return rect.width > 0 && rect.height > 0 &&
+      style.display !== 'none' && style.visibility !== 'hidden';
+  };
+
+  const activeScope = () => {
+    const player = document.getElementById('player-overlay');
+    if (player && !player.classList.contains('hidden')) return player;
+    const livePlayer = document.getElementById('livetv-player-overlay');
+    if (livePlayer && !livePlayer.classList.contains('hidden')) return livePlayer;
+    const modal = document.getElementById('detail-modal-backdrop');
+    if (modal && modal.classList.contains('open')) return modal;
+    const gate = document.getElementById('password-gate');
+    if (gate && !gate.classList.contains('hidden')) return gate;
+    return document.getElementById('app') || document;
+  };
+
+  const focusables = () => {
+    const scope = activeScope();
+    prepare(scope);
+    return Array.from(scope.querySelectorAll(selector)).filter(visible);
+  };
+
+  const move = (direction) => {
+    const items = focusables();
+    if (!items.length) return;
+    const current = items.includes(document.activeElement) ? document.activeElement : null;
+    if (!current) {
+      items[0].focus();
+      return;
+    }
+
+    const from = current.getBoundingClientRect();
+    const fx = from.left + from.width / 2;
+    const fy = from.top + from.height / 2;
+    let best = null;
+    let bestScore = Infinity;
+
+    items.forEach((candidate) => {
+      if (candidate === current) return;
+      const rect = candidate.getBoundingClientRect();
+      const x = rect.left + rect.width / 2;
+      const y = rect.top + rect.height / 2;
+      const dx = x - fx;
+      const dy = y - fy;
+      if ((direction === 'left' && dx >= -4) ||
+          (direction === 'right' && dx <= 4) ||
+          (direction === 'up' && dy >= -4) ||
+          (direction === 'down' && dy <= 4)) return;
+
+      const primary = direction === 'left' || direction === 'right' ? Math.abs(dx) : Math.abs(dy);
+      const secondary = direction === 'left' || direction === 'right' ? Math.abs(dy) : Math.abs(dx);
+      const score = primary + secondary * 2.5;
+      if (score < bestScore) {
+        best = candidate;
+        bestScore = score;
+      }
+    });
+
+    if (best) {
+      best.focus({ preventScroll: true });
+      best.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+    }
+  };
+
+  prepare();
+  new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => mutation.addedNodes.forEach((node) => {
+      if (node.nodeType === 1) prepare(node);
+    }));
+  }).observe(document.body, { childList: true, subtree: true });
+
+  document.addEventListener('keydown', (e) => {
+    const directions = {
+      ArrowLeft: 'left', ArrowRight: 'right', ArrowUp: 'up', ArrowDown: 'down'
+    };
+    if (directions[e.key]) {
+      e.preventDefault();
+      move(directions[e.key]);
+      return;
+    }
+    if ((e.key === 'Enter' || e.key === ' ') &&
+        document.activeElement &&
+        !document.activeElement.matches('input, select, button, a[href]')) {
+      e.preventDefault();
+      document.activeElement.click();
+    }
+  });
+
+  requestAnimationFrame(() => {
+    const items = focusables();
+    if (items.length && !items.includes(document.activeElement)) items[0].focus();
+  });
 }
 
 // ==================== KEYBOARD SHORTCUTS ====================

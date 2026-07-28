@@ -736,7 +736,22 @@ header h1 .logo-accent {
 }
 
 .movie-card:active {
-  transform: scale(1.02);
+  transform: scale(0.98);
+}
+
+/* Android TV / Fire TV D-pad focus indicator */
+:where(button, input, select, a[href], [tabindex]):focus-visible {
+  outline: 4px solid #6C5CE7 !important;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 2px #fff, 0 0 22px rgba(108, 92, 231, 0.95) !important;
+  position: relative;
+  z-index: 20;
+}
+
+.movie-card:focus-visible,
+.episode-item:focus-visible,
+.channel-item:focus-visible {
+  transform: scale(1.08);
 }
 
 .movie-card-poster {
