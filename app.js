@@ -76,7 +76,6 @@ function initApp() {
   setupModeTabs();
   setupSearch();
   setupNavigation();
-  setupTVRemoteNavigation();
   loadMovieTV();
   registerServiceWorker();
 }
@@ -902,8 +901,10 @@ function registerServiceWorker() {
 
 // ==================== TV REMOTE / KEYBOARD NAVIGATION ====================
 function setupTVRemoteNavigation() {
+  if (window.__streamWrapTVNavigation) return;
+  window.__streamWrapTVNavigation = true;
   const selector = [
-    'button', 'input', 'select', 'a[href]',
+    'button', 'input', 'textarea', 'select', 'a[href]',
     '.movie-card', '.episode-item', '.channel-item',
     '[onclick]', '[tabindex]'
   ].join(',');
@@ -1001,7 +1002,15 @@ function setupTVRemoteNavigation() {
     }
     if ((e.key === 'Enter' || e.key === ' ') &&
         document.activeElement &&
-        !document.activeElement.matches('input, select, button, a[href]')) {
+        document.activeElement.matches('input, textarea, select, [contenteditable="true"]')) {
+      // A real remote key gesture is required for Android TV WebView to open its IME.
+      document.activeElement.focus();
+      document.activeElement.click();
+      return;
+    }
+    if ((e.key === 'Enter' || e.key === ' ') &&
+        document.activeElement &&
+        !document.activeElement.matches('input, textarea, select, button, a[href]')) {
       e.preventDefault();
       document.activeElement.click();
     }
@@ -1012,6 +1021,9 @@ function setupTVRemoteNavigation() {
     if (items.length && !items.includes(document.activeElement)) items[0].focus();
   });
 }
+
+// Start on the password gate too; dynamic app controls are picked up by the observer.
+setupTVRemoteNavigation();
 
 // ==================== KEYBOARD SHORTCUTS ====================
 document.addEventListener('keydown', (e) => {

@@ -740,16 +740,20 @@ header h1 .logo-accent {
 }
 
 /* Android TV / Fire TV D-pad focus indicator */
-:where(button, input, select, a[href], [tabindex]):focus-visible {
-  outline: 4px solid #6C5CE7 !important;
-  outline-offset: 3px;
-  box-shadow: 0 0 0 2px #fff, 0 0 22px rgba(108, 92, 231, 0.95) !important;
+:where(button, input, textarea, select, a[href], [tabindex]):focus,
+:where(button, input, textarea, select, a[href], [tabindex]):focus-visible {
+  outline: 5px solid #FFFFFF !important;
+  outline-offset: 4px;
+  box-shadow: 0 0 0 3px #6C5CE7, 0 0 30px rgba(108, 92, 231, 1) !important;
   position: relative;
   z-index: 20;
 }
 
+.movie-card:focus,
 .movie-card:focus-visible,
+.episode-item:focus,
 .episode-item:focus-visible,
+.channel-item:focus,
 .channel-item:focus-visible {
   transform: scale(1.08);
 }
