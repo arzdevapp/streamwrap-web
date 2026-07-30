@@ -367,8 +367,10 @@ function buildCard(item) {
   const mediaType = item.media_type || (item.first_air_date ? 'tv' : 'movie');
   const id = item.id;
 
+  const action = mediaType === 'movie' ? 'playItem' : 'showDetail';
+
   return `
-    <div class="movie-card" onclick="showDetail(${id}, '${mediaType}')" data-id="${id}">
+    <div class="movie-card" onclick="${action}(${id}, '${mediaType}')" data-id="${id}">
       ${poster ? `<img class="movie-card-poster" src="${poster}" alt="${title}" loading="lazy" onerror="this.parentElement.style.display='none'">` : '<div class="movie-card-poster skeleton"></div>'}
       <div class="movie-card-overlay">
         <div class="movie-card-title">${title}</div>
