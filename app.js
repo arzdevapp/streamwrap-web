@@ -552,10 +552,9 @@ function playItem(id, mediaType, season, episode) {
       embedUrl = `${provider.base}/movie/${id}`;
     }
 
-    // Providers that block iframes (X-Frame-Options) open as external tab
+    // Providers that block iframes navigate directly; TV WebViews often block popups.
     if (provider.external) {
-      closePlayer();
-      window.open(embedUrl, '_blank', 'noopener');
+      window.location.href = embedUrl;
       return;
     }
 
