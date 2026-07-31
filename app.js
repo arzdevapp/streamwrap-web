@@ -9,12 +9,12 @@ const IMG_BACKDROP = 'https://image.tmdb.org/t/p/w1280';
 const STREAMWRAP_PASSWORD = 'iamcool';
 
 const EMBED_PROVIDERS = [
-  { name: 'VidSrc', base: 'https://vidsrc-embed.ru/embed' },
+  { name: 'VidSrc', base: 'https://vsembed.ru/embed' },
   { name: 'VidCore', base: 'https://vidcore.net' },
-  { name: 'VideoEasy', base: 'https://player.videasy.net' },
+  { name: 'VideoEasy', base: 'https://player.videasy.to/embed' },
   { name: 'Peachify', base: 'https://peachify.top/embed' },
-  { name: 'VidGod', base: 'https://vidgod.net' },
-  { name: 'Vidify', base: 'https://player.vidify.top/embed' },
+  { name: 'VidGod', base: 'https://vidgod.site/embed' },
+  { name: '2Embed', base: 'https://www.2embed.cc/embed' },
 ];
 
 // ==================== CACHE ====================
@@ -180,9 +180,9 @@ function buildAppHTML() {
           <button class="pill-btn active" data-url="worldcup">🏆 World Cup</button>
           <button class="pill-btn" data-url="https://iptv-org.github.io/iptv/categories/sports.m3u">⚽ Sports</button>
           <button class="pill-btn" data-url="https://iptv-org.github.io/iptv/index.m3u">🌍 All Channels</button>
-          <button class="pill-btn" data-url="https://raw.githubusercontent.com/Free-TV/IPTV/master/iptv.m3u">📡 Free TV</button>
-          <button class="pill-btn" data-url="https://streamwrap-m3u.pages.dev/ph.m3u">🇵🇭 Philippines</button>
+          <button class="pill-btn" data-url="https://m3u.arzhub.net/ph.m3u">🇵🇭 Philippines</button>
           <button class="pill-btn" data-url="https://iptv-org.github.io/iptv/categories/news.m3u">📰 News</button>
+          <button class="pill-btn" data-url="https://m3u.arzhub.net/sports.m3u">⚡ Premium Sports</button>
         </div>
         <div id="playlist-status" class="hidden"></div>
       </section>
