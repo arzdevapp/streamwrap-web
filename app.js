@@ -15,6 +15,9 @@ const EMBED_PROVIDERS = [
   { name: 'Peachify', base: 'https://peachify.top/embed' },
   { name: 'VidGod', base: 'https://vidgod.site/embed' },
   { name: '2Embed', base: 'https://www.2embed.cc/embed' },
+  { name: 'VidBox', base: 'https://dl.vidbox.vc/p/info.html', build: (id, type, season, episode) => type === 'tv'
+      ? `https://dl.vidbox.vc/p/info.html?id=${id}&type=tv&season=${season}&episode=${episode}`
+      : `https://dl.vidbox.vc/p/info.html?id=${id}&type=movie` },
 ];
 
 // ==================== CACHE ====================
@@ -541,7 +544,9 @@ function playItem(id, mediaType, season, episode) {
   function loadEmbed(providerIndex) {
     const provider = EMBED_PROVIDERS[providerIndex];
     let embedUrl;
-    if (mediaType === 'tv' && season && episode) {
+    if (provider.build) {
+      embedUrl = provider.build(id, mediaType, season, episode);
+    } else if (mediaType === 'tv' && season && episode) {
       embedUrl = `${provider.base}/tv/${id}?season=${season}&episode=${episode}`;
     } else {
       embedUrl = `${provider.base}/movie/${id}`;
