@@ -15,6 +15,9 @@ const EMBED_PROVIDERS = [
   { name: 'Peachify', base: 'https://peachify.top/embed' },
   { name: 'VidGod', base: 'https://vidgod.site/embed' },
   { name: '2Embed', base: 'https://www.2embed.cc/embed' },
+  { name: 'Stream4Fun', base: 'https://screenfetch4.cyou/embed', build: (id, type, season, episode) => type === 'tv'
+      ? `https://screenfetch4.cyou/embed/tv?tmdb=${id}&season=${season}&episode=${episode}`
+      : `https://screenfetch4.cyou/embed/movie?tmdb=${id}&o=${encodeURIComponent(window.location.origin)}` },
   { name: 'VidBox', base: 'https://dl.vidbox.vc/p/info.html', external: true, build: (id, type, season, episode) => type === 'tv'
       ? `https://dl.vidbox.vc/p/info.html?id=${id}&type=tv&season=${season}&episode=${episode}`
       : `https://dl.vidbox.vc/p/info.html?id=${id}&type=movie` },
